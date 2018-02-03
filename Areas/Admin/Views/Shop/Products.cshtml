@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Supreme.Models.ProductViewModels>
+
+@{
+    ViewBag.Title = "Products";
+}
+
+@using PagedList.Mvc;
+@using PagedList;
+
+<h2>Products</h2>
+
+<select id="SelectedCategory" name="SeletedCategory">
+    <option value="0">All</option>
+    @foreach (var item in ViewBag.Categories)
+    {
+        if (ViewBag.SelectedCat == item.Value)
+        {
+            <option selected="selected" value="@item.Value">@item.Text</option>
+        }
+        else
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    }
+</select>
+
+<p>
+    @Html.ActionLink("Create New", "AddProduct")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BrandId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var product in ViewBag.OnePageOfProducts)
+    {
+    <tr>
+        <td>
+            @product.ProductName
+        </td>
+        <td>
+            @product.Price
+        </td>
+        <td>
+            @product.Description
+        </td>
+        <td>
+            @product.BrandName
+        </td>
+        <td>
+            @product.CategoryName
+        </td>
+        <td>
+            <img src="/Images/Uploads/Products/@product.Id/Thumbs/@product.ImageName" height="75" width="75" />
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditProduct", new { id = product.Id }) |
+            @Html.ActionLink("Delete", "DeleteProduct", new { id = product.Id }, new { @class = "delete" })
+        </td>
+    </tr>
+    }
+
+</table>
+
+@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("Products", new { page, catId = ViewBag.SelectedCat }))
+
+@section Scripts{
+    <script>
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        * Comfirm delete
+        */
+
+        $("body").on("click", "a.delete", function () {
+            if (!confirm("Comfirm product deletion")) return false;
+        });
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        * Page Cat
+        */
+
+        $("#SelectedCategory").on("change", function () {
+            var url = $(this).val();
+            if (url) {
+                window.location = "/Admin/Shop/Products?catId=" + url;
+            }
+            return false;
+        });
+    </script>
+}

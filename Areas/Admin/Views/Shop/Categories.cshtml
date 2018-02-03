@@ -1,0 +1,207 @@
+﻿@model IEnumerable<Supreme.Models.CategoryViewModels>
+
+@{
+    ViewBag.Title = "Categories";
+}
+
+<h2>Categories</h2>
+
+<div class="new-category">
+    <input type="text" id="newcategoryname" />
+    <p>
+        <a href="#" id="newcategory">Create</a>
+        <span class="ajax-text"></span>
+    </p>
+</div>
+@if (!Model.Any())
+{
+    <h1 class="text-center">There is no category!</h1>
+}
+else
+{
+    <table class="table sorting" id="pages">
+        <tr class="success home">
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr id="id_@item.Id">
+                <td>
+                    @Html.EditorFor(modelItem => item.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </td>
+                <td>
+                    <a class="edit">Edit</a>
+                    <a class="save">Save</a> |
+                    @Html.ActionLink("Delete", "DeleteCategory", new { id = item.Id }, new { @class = "delete" })
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+@section Scripts{
+    <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <script>
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        * create brand
+        */
+
+        $(function () {
+
+            var newCategory = $("a#newcategory");
+            var newCategoryTextInput = $("#newcategoryname");
+            var ajaxText = $("span.ajax-text");
+            var table = $("table#pages tbody");
+
+            newCategoryTextInput.keyup(function (e) {
+                if (e.keyCode == 13) {
+                    newCategory.click();
+                }
+            });
+
+            newCategory.click(function (e) {
+                e.preventDefault();
+                var categoryName = newCategoryTextInput.val();
+                if (categoryName.length < 1) {
+                    ajaxText.html("<span class='alert alert-danger'> Please enter category name.</span>");
+                    setTimeout(function () {
+                        ajaxText.fadeOut("fast", function () {
+                            ajaxText.html("");
+                        });
+                    }, 2000);
+                    return false;
+                }
+
+                ajaxText.show();
+
+                var url = "/admin/Shop/CreateCategory";
+                $.post(url, { cName: categoryName }, function (data) {
+                    var response = data.trim();
+                    if (response == "titletaken") {
+                        ajaxText.html("<span class='alert alert-danger'> That Category Name is taken</span>");
+                        setTimeout(function () {
+                            ajaxText.fadeOut("fast", function () {
+                                ajaxText.html("");
+                            });
+                        }, 2000);
+                        return false;
+                    }
+                    else {
+                        if (!$("table#page").length) {
+                            location.reload;
+                        } else {
+                            ajaxText.html("<span class='alert alert-success'> That Category was created</span>");
+                            setTimeout(function () {
+                                ajaxText.fadeOut("fast", function () {
+                                    ajaxText.html("");
+                                });
+                            }, 2000);
+
+                            newCategoryTextInput.val("");
+                            var toAppend = $("table#pages tbody tr:last").clone();
+                            toAppend.attr("id", "id" + data);
+                            toAppend.find("#item_Name").val(categoryName);
+                            toAppend.find("a.delete").attr("href", "/admin/Shop/DeleteCategory/" + data);
+
+                            table.append(toAppend);
+                            table.sortable("refresh");
+
+                        }
+                    }
+                });
+            });
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        * Confirm brand deletion
+        */
+
+            $("body").on("click", "a.delete", function () {
+                if (!confirm("Comfirm Page deletion")) return false;
+            });
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        * Edit brand
+        */
+            $('.save').hide();
+            //by double click
+            var originalTextBoxValue;
+            $("table#pages input.text-box").dblclick(function () {
+                originalTextBoxValue = $(this).val();
+                $(this).attr("readonly", false);
+                $(this).parent().parent().find("a.save").show();
+                $(this).parent().parent().find("a.edit").hide();
+            });
+
+            $("table#pages input.text-box").keyup(function (e) {
+                if (e.keyCode == 13) {
+                    $(this).blur();
+                    $(this).attr("readonly", true);
+                }
+            });
+
+            //by click
+            $("body").on("click", "a.edit", function () {
+                $(this).hide();
+                $(this).parent().find("a.save").show();
+                originalTextBoxValue = $(this).parent().parent().find("input.text-box").val();
+                $(this).parent().parent().find("input.text-box").attr("readonly", false);
+            });
+            $("body").on("click", "a.save", function () {
+                $(this).blur();
+                $(this).parent().parent().find("input.text-box").attr("readonly", true);
+                $(this).hide();
+                $(this).parent().find("a.edit").show();
+
+            });
+
+            $("table#pages input.text-box").blur(function () {
+                var $this = $(this);
+                var newCName = $this.val();
+                var ajaxDiv = $this.parent().find("span.ajaxdiv");
+                var id = $this.parent().parent().attr("id").substring(3);
+                var url = "/admin/Shop/EditCategory";
+
+                if (newCName.length < 1) {
+                    alert("Please enter category name.");
+                    $(this).attr("readonly", true);
+                    $this.val(originalTextBoxValue);
+                    return false;
+                }
+
+                $.post(url, { id: id, cName: newCName }, function (data) {
+                    var response = data.trim();
+                    if (response == "titletaken") {
+                        $this.val(originalTextBoxValue);
+                        ajaxDiv.html("<span class='alert alert-danger'> That Category Name is taken</span>");
+                    }
+                    else {
+                        ajaxDiv.html("<span class='alert alert-success'> That Category Name is changed</span>");
+                    }
+                    setTimeout(function () {
+                        ajaxText.fadeOut("fast", function () {
+                            ajaxDiv.html("");
+                        });
+                    }, 2000);
+                });
+
+
+            });
+        });
+
+
+    </script>
+
+
+}
+

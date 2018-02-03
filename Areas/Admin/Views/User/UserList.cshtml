@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Supreme.Models.UserViewModels>
+
+@{
+    ViewBag.Title = "UserList";
+}
+
+@using PagedList.Mvc;
+@using PagedList;
+
+<select id="SelectedRole" name="SeletedRole">
+    <option value="0">All</option>
+    @foreach (var item in ViewBag.Roles)
+    {
+        if (ViewBag.SelectedRole == item.Value)
+        {
+            <option selected="selected" value="@item.Value">@item.Text</option>
+        }
+        else
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    }
+</select>
+
+<h2>UserList</h2>
+
+<p>
+    @Html.ActionLink("Create New", "CreateUser")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoleName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var product in ViewBag.onePageOfUsers)
+    {
+        <tr>
+            <td>
+                @product.UserName
+            </td>
+            <td>
+                @product.Email
+            </td>
+            <td>
+                @product.RoleName
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditUser", new { id = product.Id }) |
+                @Html.ActionLink("Delete", "DeleteUser", new { id = product.Id })
+            </td>
+        </tr>
+     }
+
+</table>
+@Html.PagedListPager((IPagedList)ViewBag.OnePageOfUsers, page => Url.Action("UserList", new { page, roleId = ViewBag.SelectedRole }))
+
+@section Scripts{
+    <script>
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        * Comfirm delete
+        */
+
+        $("body").on("click", "a.delete", function () {
+            if (!confirm("Comfirm product deletion")) return false;
+        });
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        /*
+        * Page Cat
+        */
+
+        $("#SelectedRole").on("change", function () {
+            var url = $(this).val();
+            if (url) {
+                window.location = "/Admin/User/UserList?catId=" + url;
+            }
+            return false;
+        });
+    </script>
+}
