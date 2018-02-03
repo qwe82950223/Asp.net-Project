@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Supreme.Models.CartViewModels>
+
+<li class="dropdown" data-cartpartial-menu>
+    <a href="#">
+        <span class="hidden-xs">
+            Cart<sup class="text-primary">@ViewBag.QtyTotal</sup>
+            <i class="fa fa-angle-down ml-5"></i>
+        </span>
+    </a>
+    <ul class="dropdown-menu cart w-250" role="menu">
+        @if (Session["cart"] == null)
+        {
+        <li><p class="text-center">There is not item in Cart!</p></li>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <li>
+                    <div class="cart-items">
+                        <ol class="items">
+                            <li>
+                                <a href="#" class="product-image"> <img src="/Images/Uploads/Products/@item.ProductId/Thumbs/@item.ImageName"  height="50px" width="50" > </a>
+                                <div class="product-details">
+                                    <div class="close-icon"> <a href="#"><i class="fa fa-close"></i></a> </div>
+                                    <p class="product-name"> <a href="#">@item.ProductName</a> </p> <strong>@item.Quantity</strong> x <span class="price text-primary">@item.Price</span>
+                                </div>
+                                <!-- end product-details -->
+                            </li>
+                            <!-- end item -->
+
+                        </ol>
+                    </div>
+                </li>
+            }
+             <li><h4>Total: @ViewBag.GrandTotal</h4></li>
+        }
+       
+        <li>
+            <div class="cart-footer">
+                <a href="@Url.Action("CartDetail","Cart")" class="pull-left">
+                    <i class="fa fa-cart-plus mr-5"></i>View
+                    Cart
+                </a> <a href="#" class="pull-right"><i class="fa fa-shopping-basket mr-5"></i>Checkout</a>
+            </div>
+        </li>
+    </ul>
+</li>

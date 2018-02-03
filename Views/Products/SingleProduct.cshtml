@@ -1,0 +1,205 @@
+﻿@model Supreme.Models.ProductViewModels
+
+@{
+    ViewBag.Title = "SingleProduct";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-4 item-photo">
+            <img style="max-width:100%;" src="/Images/Uploads/Products/@Model.Id/Thumbs/@Model.ImageName" />
+        </div>
+        <div class="col-xs-5" style="border:0px solid gray">
+            <!-- Datos del vendedor y titulo del producto -->
+            <h3>@Model.ProductName</h3>
+            <h5 style="color:#337ab7">vendido por <a href="#">Samsung</a> · <small style="color:#337ab7">(5054 ventas)</small></h5>
+
+            <!-- Precios -->
+            <h6 class="title-price"><small>PRECIO OFERTA</small></h6>
+            <h3 style="margin-top:0px;">U$S 399</h3>
+
+
+            @if(Model.ProductType == "0")
+            {
+            <div class="section" style="padding-bottom:5px;">
+                <h6 class="title-attr"><small>Size</small></h6>
+                <select class="form-control clothsize" style="max-width:200px;">
+                    <option disabled selected value="">select an size</option>
+                    <option value="@Model.ClothSizeList.XS" @if (Model.ClothSizeList.XS < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ClothSizeList.XS">XS</option>
+                    <option value="@Model.ClothSizeList.S" @if (Model.ClothSizeList.S < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ClothSizeList.S">S</option>
+                    <option value="@Model.ClothSizeList.M" @if (Model.ClothSizeList.M < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ClothSizeList.M">M</option>
+                    <option value="@Model.ClothSizeList.L" @if (Model.ClothSizeList.L < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ClothSizeList.L">L</option>
+                    <option value="@Model.ClothSizeList.XL" @if (Model.ClothSizeList.XL < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ClothSizeList.XL">XL</option>
+                </select>
+            </div>
+            }
+            @if(Model.ProductType == "1")
+            {
+            <div class="section" style="padding-bottom:5px;">
+                <h6 class="title-attr"><small>Size</small></h6>
+                <select class="form-control shoessize" style="max-width:200px;">
+                    <option disabled selected value="">select an size</option>
+                    <option value="@Model.ShoesSizeList.seven" @if (Model.ShoesSizeList.seven < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.seven">7</option>
+                    <option value="@Model.ShoesSizeList.sevenhalf" @if (Model.ShoesSizeList.sevenhalf < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.sevenhalf">7.5</option>
+                    <option value="@Model.ShoesSizeList.eight" @if (Model.ShoesSizeList.eight < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.eight">8</option>
+                    <option value="@Model.ShoesSizeList.eighthalf" @if (Model.ShoesSizeList.eighthalf < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.eighthalf">8.5</option>
+                    <option value="@Model.ShoesSizeList.nine" @if (Model.ShoesSizeList.nine < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.nine">9</option>
+                    <option value="@Model.ShoesSizeList.ninehalf" @if (Model.ShoesSizeList.ninehalf < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.ninehalf">9.5</option>
+                    <option value="@Model.ShoesSizeList.ten" @if (Model.ShoesSizeList.ten < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.ten">10</option>
+                    <option value="@Model.ShoesSizeList.tenhalf" @if (Model.ShoesSizeList.tenhalf < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.tenhalf">10.5</option>
+                    <option value="@Model.ShoesSizeList.eleven" @if (Model.ShoesSizeList.eleven < 1) { @Html.Raw("disabled") ; } data-mxqty="@Model.ShoesSizeList.eleven">11</option>
+                </select>
+            </div>
+            }
+            <div class="section" style="padding-bottom:20px;">
+                <h6 class="title-attr"><small>Quantity</small></h6>
+                <div>
+                    <button class="btn-minus"><span class="glyphicon glyphicon-minus"></span></button>
+                    <input value="1"/>
+                    <button class="btn-plus"><span class="glyphicon glyphicon-plus"></span></button>
+                </div>
+            </div>
+
+            <!-- Botones de compra -->
+            <div class="section" style="padding-bottom:20px;">
+                <button class="btn btn-success addtocart"><span style="margin-right: 10px" class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>Add to Cart</button>
+                <span class="ajaxmsg"></span>
+            </div>
+        </div>
+
+        <div class="col-xs-9">
+            <ul class="menu-items">
+                <li class="active">Detalle del producto</li>
+                <li>Garantía</li>
+                <li>Vendedor</li>
+                <li>Envío</li>
+            </ul>
+            <div style="width:100%;border-top:1px solid silver">
+                <p style="padding:15px;">
+                    <small>
+                        Stay connected either on the phone or the Web with the Galaxy S4 I337 from Samsung. With 16 GB of memory and a 4G connection, this phone stores precious photos and video and lets you upload them to a cloud or social network at blinding-fast speed. With a 17-hour operating life from one charge, this phone allows you keep in touch even on the go.
+
+                        With its built-in photo editor, the Galaxy S4 allows you to edit photos with the touch of a finger, eliminating extraneous background items. Usable with most carriers, this smartphone is the perfect companion for work or entertainment.
+                    </small>
+                </p>
+                <small>
+                    <ul>
+                        <li>Super AMOLED capacitive touchscreen display with 16M colors</li>
+                        <li>Available on GSM, AT T, T-Mobile and other carriers</li>
+                        <li>Compatible with GSM 850 / 900 / 1800; HSDPA 850 / 1900 / 2100 LTE; 700 MHz Class 17 / 1700 / 2100 networks</li>
+                        <li>MicroUSB and USB connectivity</li>
+                        <li>Interfaces with Wi-Fi 802.11 a/b/g/n/ac, dual band and Bluetooth</li>
+                        <li>Wi-Fi hotspot to keep other devices online when a connection is not available</li>
+                        <li>SMS, MMS, email, Push Mail, IM and RSS messaging</li>
+                        <li>Front-facing camera features autofocus, an LED flash, dual video call capability and a sharp 4128 x 3096 pixel picture</li>
+                        <li>Features 16 GB memory and 2 GB RAM</li>
+                        <li>Upgradeable Jelly Bean v4.2.2 to Jelly Bean v4.3 Android OS</li>
+                        <li>17 hours of talk time, 350 hours standby time on one charge</li>
+                        <li>Available in white or black</li>
+                        <li>Model I337</li>
+                        <li>Package includes phone, charger, battery and user manual</li>
+                        <li>Phone is 5.38 inches high x 2.75 inches wide x 0.13 inches deep and weighs a mere 4.59 oz </li>
+                    </ul>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/Content/SingleProduct.css" rel="stylesheet" />
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        //-- Click on detail
+        var maxQty;
+
+        $(".clothsize").change(function () {
+            maxQty = $(this).val();
+            $(".btn-plus").prop("disabled", false);
+            $(".section > div > input").val("1");
+        });
+        $(".shoessize").change(function () {
+            maxQty = $(this).val();
+            $(".btn-plus").prop("disabled", false);
+            $(".section > div > input").val("1");
+        });
+
+        $(".section > div > input").change(function () {
+            var now = $(this).val();
+            if ($.isNumeric(now) && now < maxQty) {
+                $(".section > div > input").val(parseInt(now));
+            } else {
+                $(".section > div > input").val("1");
+            }
+        });
+
+        $("ul.menu-items > li").on("click", function () {
+            $("ul.menu-items > li").removeClass("active");
+            $(this).addClass("active");
+        })
+
+        $(".attr,.attr2").on("click", function () {
+            var clase = $(this).attr("class");
+
+            $("." + clase).removeClass("active");
+            $(this).addClass("active");
+        })
+
+        //-- Click on QUANTITY
+        $(".btn-minus").on("click", function () {
+            var now = $(".section > div > input").val();
+            if ($.isNumeric(now)) {
+                if (parseInt(now) - 1 > 0) { now--; }
+                $(".section > div > input").val(now);
+                $(".btn-plus").prop("disabled", false);
+            } else {
+                $(".section > div > input").val("1");
+                $(".btn-plus").prop("disabled", flase);
+            }
+        })
+        $(".btn-plus").on("click", function () {
+            var now = parseInt($(".section > div > input").val())+1;
+            if (now == maxQty) {
+                $(this).prop("disabled",true);
+            }
+            $(".section > div > input").val(now);
+        })
+
+        $("button.addtocart").click(function (e) {
+            e.preventDefault();
+            if ($(".clothsize").val() == null && $(".shoessize").val() == null) {
+
+            }
+            else {
+                if ($(".shoessize").val() != null) {
+                    var size = $(".shoessize option:selected").text();
+                }
+                if ($(".clothsize").val() != null) {
+                    var size = $(".clothsize option:selected").text();
+                }
+                $(".span.loader").addClass("ib");
+                var currentQty = $(".section > div > input").val();
+                var url = "/Cart/AddCartPartial";
+                $.get(url, { id: @Model.Id, currentqty: currentQty, size: size, maxQty: maxQty }, function (data) {
+                    $(".ajaxcart").html(data);
+                }).done(function () {
+                    $("span.loader").removeClass("ib");
+                    $("span.ajaxmsg").addClass("ib");
+                    setTimeout(function () {
+                        $("span.ajaxmsg").fadeOut("fast");
+                        $("span.ajaxmsg").removeClass("ib");
+                    }, 2000);
+                });            
+            }
+            location.reload("~/Views/Cart/CartPartial");
+            location.reload();
+           
+        });
+    })
+
+
+   
+
+</script>
+}

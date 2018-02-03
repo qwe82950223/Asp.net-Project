@@ -1,0 +1,162 @@
+﻿@model IEnumerable<Supreme.Models.CartViewModels>
+
+@{
+    ViewBag.Title = "Cart Detail";
+}
+
+<h2>My Cart</h2>
+
+@if(ViewBag.Message != null)
+{
+    <br />
+    <h2 class="text-center">@ViewBag.Message</h2>
+}
+else{ 
+    <table class="table">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Size
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Image
+            </th>
+            <th>
+                Total
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td class="qty(@item.ProductId)">
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductSize)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <img src="/Images/Uploads/Products/@item.ProductId/Thumbs/@item.ImageName" height="50" width="50" />
+            </td>
+            <td>
+                <a href="#" class="btn btn-default @if (item.Quantity == item.maxQty) { @Html.Raw("disabled"); } incrproduct" data-id="@item.ProductId" data-size="@item.ProductSize">+</a>
+                <a href="#" class="btn btn-default @if (item.Quantity <= 1) { @Html.Raw("disabled"); } decrproduct" data-id="@item.ProductId" data-size="@item.ProductSize">-</a>
+                <a href="#" class="btn btn-default reomoveproduct" data-id="@item.ProductId" data-size="@item.ProductSize">Remove</a>
+            </td>
+            <td class="total(@item.ProductId)">
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+        </tr>
+}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>$ @ViewBag.GrandTotal</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="#" class="btn btn-default checkoutnow">Check Out</a></td>
+        </tr>
+
+    </table>
+}
+
+@section Scripts{
+    <script>
+        $("a.incrproduct").click(function (e) {
+            e.preventDefault();
+            var productSize = $(this).data("size");
+            var productId = $(this).data("id");
+            var url = "/Cart/IncrementProduct";
+
+            $.getJSON(url, { id: productId, size: productSize }, function (data) {
+                $("td.qty" + productId).html(data.qty);
+
+                var price = data.qty * data.price;
+                var priceHtml = "$" + price.toFixed(2);
+
+                $("td.total" + productId).html(priceHtml);
+                var gt = parseFloat($("td.grandtotal span").text());
+                var grandtotal = (gt + data.price).toFixed(2);
+
+                $("td.grandtotal span").text(grandtotal);
+            });
+            location.reload();
+         });
+
+
+    $("a.decrproduct").click(function (e) {
+        e.preventDefault();
+        var productSize = $(this).data("size");
+        var productId = $(this).data("id");
+        var url = "/Cart/DecreaseProduct";
+
+        $.getJSON(url, { id: productId, size: productSize }, function (data) {
+            $("td.qty" + productId).html(data.qty);
+
+            var price = data.qty * data.price;
+            var priceHtml = "$" + price.toFixed(2);
+
+            $("td.total" + productId).html(priceHtml);
+            var gt = parseFloat($("td.grandtotal span").text());
+            var grandtotal = (gt - data.price).toFixed(2);
+
+            $("td.grandtotal span").text(grandtotal);
+        });
+        location.reload();
+    });
+
+    $("a.reomoveproduct").click(function (e) {
+        e.preventDefault();
+
+        var productId = $(this).data("id");
+        var productSize = $(this).data("size");
+        var url = "/Cart/RemoveProduct";
+
+        $.get(url, { id: productId, size: productSize }, function (data) {
+
+        });
+        location.reload();
+    });
+
+        $("a.checkoutnow").click(function (e) {
+            e.preventDefault();
+            if ('@Request.IsAuthenticated' === 'True') {
+                var checkouturl = "/Cart/CheckOut";
+                $.post(checkouturl, { total: @ViewBag.GrandTotal}, function (data) {
+                });
+            }
+            else {
+                if (confirm("Check out as Guest?")) {
+                    var checkouturl = "/Cart/CheckOut";
+                    $.post(checkouturl, { total: @ViewBag.GrandTotal}, function (data) {
+                    });
+                }
+                else { window.location.href = "~/Account/Login" }
+            }
+
+
+        });
+    </script>
+}

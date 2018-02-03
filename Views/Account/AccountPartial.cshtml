@@ -1,0 +1,39 @@
+﻿@model Supreme.Models.AccountViewModels
+
+<li class="dropdown" data-accountpartial-menu>
+    <a href="#"><span class="hidden-xs">My Account<i class="fa fa-angle-down ml-5"></i></span> </a>
+    @if (Request.IsAuthenticated)
+    {
+    <ul class="dropdown-menu account w-150" role="menu">
+        <li>
+            <a href="~/Account/AccountProfile">My ProFile</a>
+        </li>
+        <li>
+            <a href="wishlist.html">Wishlist</a>
+        </li>
+        <li>
+            <a href="~/Cart/CartDetail">My Cart</a>
+        </li>
+        <li>
+            <a href="~/Account/OrderHistory">Order History</a>
+        </li>
+        <li>
+            <a href="~/Account/Logout">logout</a>
+        </li>
+    </ul>
+    }
+    else
+    {
+        <ul class="dropdown-menu account w-150" role="menu">
+            <li>
+                <a href="~/Account/Login">Login</a>
+            </li>
+            <li>
+                <a href="~/Account/Register">Create Account</a>
+            </li>
+        </ul>
+
+    }
+            
+    
+</li>

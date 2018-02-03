@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Supreme.Models.ProductViewModels>
+
+@{
+    ViewBag.Title = "Products List";
+}
+
+
+@using PagedList.Mvc;
+@using PagedList;
+
+<h2>Products List</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var product in ViewBag.OnePageOfProducts)
+        {
+            <div class="col-md-4">
+                <div class="product-item">
+                    <div class="pi-img-wrapper">
+                        <img src="/Images/Uploads/Products/@product.Id/Thumbs/@product.ImageName" height="200" width="200" alt="Berry Lace Dress">
+                        <div>
+                            @Html.ActionLink("View", "SingleProduct", new { id = product.Id }, new { @class = "image-holder__link btn" })
+                        </div>
+                    </div>
+                    <h3><a href="shop-item.html">@product.ProductName</a></h3>
+                    <div class="pi-price">$ @product.Price</div>
+                    <a href="javascript:;" class="btn add2cart">Add to cart</a>
+                    <div class="sticker sticker-new"></div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+<div class="text-center">@Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("ProductsList", new { page }))</div>
+
+<link href="~/Content/ProductsList.css" rel="stylesheet" />
